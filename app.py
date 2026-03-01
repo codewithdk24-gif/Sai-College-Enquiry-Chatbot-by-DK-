@@ -861,27 +861,24 @@ def get_response(user_input):
         if any(
             w in query
             for w in [
-                "scholarship", "chhatravriti", "concession", "financial", "milti", "milta", "chahiye",
-                "discount", "free", "aid", "support", "help", "fund"
+                "scholarship", "scholarships", "financial aid", "grant", "fee waiver", "assistance"
             ]
         ):
             return (
-                "💰 SCHOLARSHIP FACILITIES:\n\n"
-                "✅ GOVERNMENT SCHOLARSHIPS:\n"
-                "🎓 SC/ST Scholarship\n"
-                "🎓 OBC Scholarship\n"
-                "🎓 EWS (Economically Weaker Section)\n\n"
-                "✅ MERIT-BASED:\n"
-                "🏆 75%+ marks: Fee concession\n"
-                "🏆 Rank holders: Special scholarship\n\n"
-                "✅ SPORTS QUOTA:\n"
-                "🏃♂️ State-level players: Fee concession\n"
-                "🏃♂️ National-level players: Higher concession\n\n"
-                "📋 REQUIRED DOCUMENTS:\n"
-                "• Caste Certificate (for SC/ST/OBC)\n"
-                "• Income Certificate (for EWS)\n"
-                "• Previous year marksheet\n\n"
-                f"📞 Details: {college_info['phone']}"
+                "💰 **SCHOLARSHIP INFORMATION:**\n\n"
+                "🎓 **SC/ST Scholarship:**\n"
+                "• Eligibility: Students belonging to SC/ST categories\n"
+                "• Amount: ₹12,000 per year (varies by case, some students get ₹6,000)\n"
+                "• Additional Support: State Government Scholarship (~₹8,444 per year) + Central Government Scholarship (~₹5,400 per year)\n"
+                "• Total Benefits: Up to ₹25,000+ per academic year for eligible students\n"
+                "• Contact: 7024886996, 9977001027\n\n"
+                "📋 **Scholarship Criteria:**\n"
+                "• Caste Category: SC/ST students receive priority\n"
+                "• Income Basis: Based on family income and merit\n"
+                "• Varying Amounts: Different students receive different amounts based on eligibility criteria\n"
+                "• Multiple Sources: Government scholarships + College scholarships combined\n\n"
+                "🔗 **How to Apply:**\n"
+                "Contact Admission Office for detailed scholarship eligibility and application process."
             )
 
         if any(word in query for word in ["placement", "job", "career", "companies", "salary", "package", "recruitment", "internship", "hiring", "rozi roti", "rozgar", "nokri"]):
@@ -910,8 +907,45 @@ def get_response(user_input):
                 f"📞 {college_info['phone']}"
             )
 
+        if any(word in query for word in ["entrance exam", "entrance test", "entrance requirement", "admission criteria", "cutoff", "merit list"]):
+            return (
+                "📋 **ADMISSION PROCESS - SAI COLLEGE:**\n\n"
+                "✅ **Direct Admission (No Entrance Exam Required)**\n\n"
+                "🎓 **For All UG & PG Courses:**\n"
+                "• BCA, B.Com, BA, BBA, BSc (all streams), MA, M.Com, M.Lib., MSc\n\n"
+                "📌 **Admission Basis:**\n"
+                "• Direct Merit-Based Admission\n"
+                "• No entrance exam required\n"
+                "• No cutoff marks\n"
+                "• No merit list system\n"
+                "• Direct admission based on 12th/Graduation marks\n\n"
+                "📝 **Eligibility Criteria:**\n"
+                "• Undergraduate: 12th Pass (any stream)\n"
+                "• Postgraduate: Relevant Bachelor's Degree\n\n"
+                "🚀 **Admission Steps:**\n"
+                "1. Fill application form\n"
+                "2. Submit required documents\n"
+                "3. Direct admission confirmation\n"
+                "4. Fee deposit and enrollment\n\n"
+                "📞 **Contact Admission Team:**\n"
+                "Phone: 7024886996, 9977001027\n"
+                "Email: director@saicollege.in\n"
+                "Website: www.saicollege.in"
+            )
+
         if any(w in query for w in ["photo", "gallery", "image", "pictures", "video", "photos", "images", "pics", "campus view", "events"]):
             return "📸 Gallery opening... Please wait!"
+
+        if any(w in query for w in ["more", "tell me more", "what else", "about that", "which one", "same one"]):
+            return (
+                "Hmm, could you clarify which course or topic you'd like more information about? Please mention:\n"
+                "• Course name (e.g., BCA, B.Com, BA)\n"
+                "• Topic (e.g., fees, admission, placement, facilities)\n\n"
+                "For example:\n"
+                "- \"Tell me more about BCA placement\"\n"
+                "- \"What is the fee structure for B.Com?\"\n"
+                "- \"How to apply for BA?\""
+            )
 
         log_data(
             "unknown_queries.csv",
