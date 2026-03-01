@@ -1790,5 +1790,5 @@ def handle_csrf_error(e):
     return "Session expired. Please refresh the page and try again.", 400
 
 if __name__ == "__main__":
-    print("🎓 Sai College Chatbot Starting...")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    print("🚀 Sai College Chatbot Starting...")
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
