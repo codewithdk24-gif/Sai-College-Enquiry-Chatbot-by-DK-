@@ -24,7 +24,7 @@ from difflib import get_close_matches
 load_dotenv()
 
 app = Flask(__name__, template_folder="templates")
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "fallback-secret-key")
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
 app.config.update(
     SESSION_COOKIE_SECURE=True,
@@ -312,39 +312,191 @@ def get_response(user_input):
             query = corrected_query
 
         course_keywords = {
+            # BCA (10 keywords)
             "bca": "BCA",
+            "bachelor of computer application": "BCA",
+            "bachelor of computer applications": "BCA",
+            "computer application": "BCA",
+            "computer applications": "BCA",
+            "b.c.a": "BCA",
+            "bca course": "BCA",
+            "bca kya hai": "BCA",
+            "bca admission": "BCA",
+            "bca fees": "BCA",
+
+            # BBA (10 keywords)
             "bba": "BBA",
+            "bachelor of business administration": "BBA",
+            "business administration": "BBA",
+            "business management": "BBA",
+            "management course": "BBA",
+            "b.b.a": "BBA",
+            "bba course": "BBA",
+            "bba kya hai": "BBA",
+            "bba admission": "BBA",
+            "bba fees": "BBA",
+
+            # B.Com (10 keywords)
             "b.com": "B.Com",
             "bcom": "B.Com",
+            "bachelor of commerce": "B.Com",
+            "commerce": "B.Com",
+            "b com": "B.Com",
+            "b.com course": "B.Com",
+            "commerce course": "B.Com",
+            "bcom fees": "B.Com",
+            "bcom admission": "B.Com",
+            "bcom kya hai": "B.Com",
+
+            # BSc Biotech (10 keywords)
             "bsc biotech": "BSc Biotech",
             "biotech": "BSc Biotech",
             "biotechnology": "BSc Biotech",
+            "bsc biotechnology": "BSc Biotech",
+            "b.sc biotech": "BSc Biotech",
+            "b.sc biotechnology": "BSc Biotech",
+            "bachelor of science biotechnology": "BSc Biotech",
+            "biotech course": "BSc Biotech",
+            "biotech fees": "BSc Biotech",
+            "biotech admission": "BSc Biotech",
+
+            # BSc CS (10 keywords)
             "bsc cs": "BSc CS",
             "bsc computer": "BSc CS",
             "computer science": "BSc CS",
+            "bsc computer science": "BSc CS",
+            "b.sc cs": "BSc CS",
+            "b.sc computer science": "BSc CS",
+            "bsc it": "BSc CS",
+            "information technology": "BSc CS",
+            "bsc cs fees": "BSc CS",
+            "bsc cs admission": "BSc CS",
+
+            # BSc Maths/Bio (10 keywords)
             "bsc maths": "BSc Maths/Bio",
             "bsc bio": "BSc Maths/Bio",
+            "bsc mathematics": "BSc Maths/Bio",
+            "bsc biology": "BSc Maths/Bio",
+            "bsc math": "BSc Maths/Bio",
+            "b.sc maths": "BSc Maths/Bio",
+            "b.sc biology": "BSc Maths/Bio",
+            "bsc science": "BSc Maths/Bio",
+            "bsc maths fees": "BSc Maths/Bio",
+            "bsc bio admission": "BSc Maths/Bio",
+
+            # BA (10 keywords)
+            "ba": "BA",
             "bachelor of arts": "BA",
+            "b.a": "BA",
+            "b.a.": "BA",
+            "arts course": "BA",
+            "arts": "BA",
+            "ba course": "BA",
+            "ba fees": "BA",
+            "ba admission": "BA",
+            "ba kya hai": "BA",
+
+            # MSc Biotech (10 keywords)
             "msc biotech": "MSc Biotech",
+            "msc biotechnology": "MSc Biotech",
+            "m.sc biotech": "MSc Biotech",
+            "m.sc biotechnology": "MSc Biotech",
+            "master of biotechnology": "MSc Biotech",
+            "pg biotech": "MSc Biotech",
+            "msc biotech course": "MSc Biotech",
+            "msc biotech fees": "MSc Biotech",
+            "msc biotech admission": "MSc Biotech",
+            "msc bio": "MSc Biotech",
+
+            # MSc CS (10 keywords)
             "msc cs": "MSc CS",
             "msc computer": "MSc CS",
+            "msc computer science": "MSc CS",
+            "m.sc cs": "MSc CS",
+            "m.sc computer science": "MSc CS",
+            "master of computer science": "MSc CS",
+            "pg cs": "MSc CS",
+            "msc cs fees": "MSc CS",
+            "msc cs admission": "MSc CS",
+            "msc it": "MSc CS",
+
+            # MSc Chemistry (10 keywords)
             "msc chemistry": "MSc Chemistry",
+            "m.sc chemistry": "MSc Chemistry",
+            "master of chemistry": "MSc Chemistry",
+            "chemistry course": "MSc Chemistry",
+            "msc chem": "MSc Chemistry",
+            "pg chemistry": "MSc Chemistry",
+            "msc chemistry fees": "MSc Chemistry",
+            "msc chemistry admission": "MSc Chemistry",
+            "chemistry": "MSc Chemistry",
+            "msc rasayan": "MSc Chemistry",
+
+            # M.Com (10 keywords)
             "m.com": "M.Com",
             "mcom": "M.Com",
+            "master of commerce": "M.Com",
+            "m com": "M.Com",
+            "pg commerce": "M.Com",
+            "m.com course": "M.Com",
+            "mcom fees": "M.Com",
+            "mcom admission": "M.Com",
+            "mcom kya hai": "M.Com",
+            "post graduate commerce": "M.Com",
+
+            # M.Lib (10 keywords)
             "m.lib": "M.Lib. (ISc)",
             "mlib": "M.Lib. (ISc)",
             "library science": "M.Lib. (ISc)",
+            "m.lib.i.sc": "M.Lib. (ISc)",
+            "master of library": "M.Lib. (ISc)",
+            "library course": "M.Lib. (ISc)",
+            "m lib": "M.Lib. (ISc)",
+            "mlisc": "M.Lib. (ISc)",
+            "mlib fees": "M.Lib. (ISc)",
+            "library science fees": "M.Lib. (ISc)",
+
+            # M.A. English (10 keywords)
             "m.a": "M.A. (English)",
             "ma english": "M.A. (English)",
-            "dca": "DCA",
-            "pgdca": "PGDCA",
-        }
+            "ma": "M.A. (English)",
+            "m.a english": "M.A. (English)",
+            "master of arts": "M.A. (English)",
+            "m.a.": "M.A. (English)",
+            "master of arts english": "M.A. (English)",
+            "english literature": "M.A. (English)",
+            "ma fees": "M.A. (English)",
+            "ma admission": "M.A. (English)",
 
+            # DCA (10 keywords)
+            "dca": "DCA",
+            "diploma in computer application": "DCA",
+            "diploma in computer applications": "DCA",
+            "computer diploma": "DCA",
+            "d.c.a": "DCA",
+            "dca course": "DCA",
+            "dca fees": "DCA",
+            "dca admission": "DCA",
+            "dca kya hai": "DCA",
+            "short term computer course": "DCA",
+
+            # PGDCA (10 keywords)
+            "pgdca": "PGDCA",
+            "post graduate diploma in computer application": "PGDCA",
+            "postgraduate diploma computer": "PGDCA",
+            "pg diploma computer": "PGDCA",
+            "pg dca": "PGDCA",
+            "p.g.d.c.a": "PGDCA",
+            "pgdca course": "PGDCA",
+            "pgdca fees": "PGDCA",
+            "pgdca admission": "PGDCA",
+            "pgdca kya hai": "PGDCA",
+        }
         tokens = set([w.strip(".,!?()[]/") for w in query.split() if w.strip()])
 
         if any(
             w in tokens
-            for w in ["hi", "hii", "hiii", "hello", "hey", "namaste", "namaskar"]
+            for w in ["hi", "hii", "hiii", "hello", "hey", "namaste", "namaskar", "helo", "hlo", "hy", "heya"]
         ):
             if current_lang == "Hindi":
                 return "🙏 नमस्ते! साई कॉलेज में आपका स्वागत है। मैं आपकी मदद कर सकता हूं!"
@@ -353,17 +505,17 @@ def get_response(user_input):
             else:
                 return "👋 Hello! Sai College me aapka swagat hai. Kaise madad karu?"
 
-        if any(w in tokens for w in ["thank", "thanks", "dhanyawad", "shukriya"]):
+        if any(w in tokens for w in ["thank", "thanks", "dhanyawad", "shukriya", "thx", "tnx", "thankyou", "thank u", "tq", "dhanyavad"]):
             return "😊 Aapka swagat hai! Kuch aur poochh sakte ho."
 
-        if any(w in query for w in ["principal", "head", "pracharya"]):
+        if any(w in query for w in ["principal", "head", "pracharya", "principle", "princi", "mukhyadhyapak", "dean", "head of college"]):
             return (
                 f"👩🏫 **Principal:** {college_info['principal']['name']}\n"
                 f"🎓 Qualification: {college_info['principal']['education']}\n"
                 "💡 College ke academic head hain."
             )
 
-        if any(w in query for w in ["director", "chairman", "owner"]):
+        if any(w in query for w in ["director", "chairman", "owner", "founder", "sanchalak", "direktor", "manager", "head sir"]):
             return (
                 f"👨💼 **Director:** {college_info['director']['name']}\n"
                 f"🎓 Qualification: {college_info['director']['role']}\n"
@@ -371,7 +523,7 @@ def get_response(user_input):
             )
 
         if any(
-            w in query for w in ["syllabus", "curriculum", "subject", "pdf", "pattern"]
+            w in query for w in ["syllabus", "curriculum", "subject", "pdf", "pattern", "silabus", "sylybus", "course content", "topics", "subjects"]
         ):
             return (
                 "📄 **Syllabus & PDF Repository**\n\n"
@@ -383,18 +535,18 @@ def get_response(user_input):
 
         if any(
             word in query
-            for word in ["transport", "bus", "vehicle", "gadi", "van", "aana jaana"]
+            for word in ["transport", "bus", "vehicle", "gadi", "van", "aana jaana", "travel", "pickup", "drop", "commute"]
         ):
             return f"🚌 **TRANSPORT FACILITY:**\n\n{college_info['facilities']['transport']}"
 
-        if any(word in query for word in ["hostel", "accommodation", "stay", "rehne"]):
+        if any(word in query for word in ["hostel", "accommodation", "stay", "rehne", "room", "pg", "lodging", "boarding", "hostal", "rehna"]):
             return f"🏠 **HOSTEL FACILITY:**\n\n{college_info['facilities']['hostel']}"
 
         if any(
             word in query
-            for word in ["lab", "laboratory", "computer", "internet", "wifi"]
+            for word in ["lab", "laboratory", "internet", "wifi", "wi-fi", "computer lab", "practical", "labs", "network", "system"]
         ):
-            return f"🔬 **LAB FACILITIES:**\n\n{college_info['facilities']['labs']}"
+            return f"🔬 **LAB FACILITIES:\n\n{college_info['facilities']['labs']}"
 
         if any(
             word in query
@@ -405,6 +557,10 @@ def get_response(user_input):
                 "pustakalaya",
                 "e-library",
                 "reading",
+                "librari",
+                "study room",
+                "reading room",
+                "journals",
             ]
         ):
             return (
@@ -413,16 +569,16 @@ def get_response(user_input):
 
         if any(
             word in query
-            for word in ["sports", "sport", "games", "khel", "cricket", "football"]
+            for word in ["sports", "sport", "games", "khel", "cricket", "football", "volleyball", "badminton", "playground", "khel kud"]
         ):
             return (
                 f"⚽ **SPORTS FACILITIES:**\n\n{college_info['facilities']['sports']}"
             )
 
-        if any(word in query for word in ["incubation", "kalakriti", "entrepreneur"]):
+        if any(word in query for word in ["incubation", "kalakriti", "entrepreneur", "startup", "business center", "innovation", "entrepreneurship", "business idea"]):
             return f"🏭 **INCUBATION CENTRE:**\n\n{college_info['facilities']['incubation']}"
 
-        facilities_keywords = ["facilities", "facility", "suvidha", "infrastructure"]
+        facilities_keywords = ["facilities", "facility", "suvidha", "infrastructure", "amenities", "features", "campus", "services", "suvidhayein", "fecility"]
         if any(keyword in query for keyword in facilities_keywords) and "all" in query:
             return (
                 "🏫 **Sai College Facilities:**\n\n"
@@ -442,16 +598,10 @@ def get_response(user_input):
         if any(
             w in query
             for w in [
-                "contact",
-                "phone",
-                "number",
-                "mobile",
-                "call",
-                "email",
-                "website",
-                "address",
-                "sampark",
-                "location",
+                "contact", "phone", "number", "mobile", "call", "email",
+                "website", "address", "sampark", "location", "helpline",
+                "inquiry", "puchtaach", "tele", "ph no", "reach",
+                "gmail", "mail", "patta", "pata"
             ]
         ):
             return (
@@ -465,7 +615,7 @@ def get_response(user_input):
 
         if any(
             w in query
-            for w in ["about", "recognition", "accreditation", "naac", "baare", "bare"]
+            for w in ["about", "recognition", "accreditation", "naac", "baare", "bare", "details", "info", "information", "history", "profile", "overview", "affiliated", "university"]
         ):
             img_html = '<img src="/static/images/main_gate.jpg" style="width:100%; border-radius:10px; margin-bottom:10px; border: 2px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" alt="Sai College Main Gate"><br>'
 
@@ -535,10 +685,10 @@ def get_response(user_input):
         ):
             return f"🚌 **TRANSPORT FACILITY:**\n\n{college_info['facilities']['transport']}"
 
-        if any(word in query for word in ["lab", "laboratory", "computer"]):
+        if any(word in query for word in ["lab", "laboratory", "internet", "wifi", "wi-fi", "computer lab", "practical", "labs", "network", "system"]):
             return f"🔬 **LAB FACILITIES:**\n\n{college_info['facilities']['labs']}"
 
-        if "fee" in query or "fees" in query or "cost" in query or "kitna" in query:
+        if any(w in query for w in ["fee", "fees", "cost", "kitna", "price", "paise", "amount", "charge", "kharcha", "payment", "rupee", "paisa"]):
             for keyword, course_name in course_keywords.items():
                 if keyword in query:
                     cat, name, info = find_course_by_keyword(course_name)
@@ -567,7 +717,7 @@ def get_response(user_input):
             return "Fee category select karo!"
 
         if (
-            any(word in query for word in ["ug", "undergraduate"])
+            any(word in query for word in ["ug", "undergraduate", "bachelor degree", "after 12th", "graduation", "under graduate", "degree course", "college degree", "first year", "bachelor"])
             and "fee" not in query
         ):
             text = "🏛️ **Available Undergraduate Courses:**\n\n(Ye rahe humare sabhi UG courses)\n\n"
@@ -576,27 +726,38 @@ def get_response(user_input):
             text += "💡 Kisi bhi course ka naam type karein full details ke liye."
             return text
 
-        if any(word in query for word in ["pg", "postgraduate"]) and "fee" not in query:
+        if any(word in query for word in ["pg", "postgraduate", "master degree", "masters", "post graduate", "after graduation", "pg degree", "master course", "higher studies", "post-graduation"]) and "fee" not in query:
             text = "🏛️ **Available Postgraduate Courses:**\n\n(Ye rahe humare sabhi PG courses)\n\n"
             for code, info in college_info["pg_courses"].items():
                 text += f"🎓 **{code}**\n⏱️ Duration: {info['duration']}\n💰 Fee: {info['fee']}\n\n"
             text += "💡 Kisi bhi course ka naam type karein full details ke liye."
             return text
 
-        if "diploma" in query and "fee" not in query:
+        if any(word in query for word in ["diploma", "short term", "certificate", "diplama", "deploma", "short course", "it course", "cert", "1 year course", "computer diploma"]) and "fee" not in query:
             text = "🏛️ **Available Diploma Courses:**\n\n(Computer & IT Diploma Courses)\n\n"
             for code, info in college_info["diploma_courses"].items():
                 text += f"🎓 **{code}**\n⏱️ Duration: {info['duration']}\n💰 Fee: {info['fee']}\n\n"
             text += "💡 Kisi bhi course ka naam type karein full details ke liye."
             return text
 
-        if "course" in query or "courses" in query:
-            if not any(word in query for word in ["ug", "pg", "diploma"]):
-                return "Category select karo!"
+        if "course" in query or "courses" in query or "course list" in query or "available courses" in query:
+            # Show all courses when user asks generically
+            text = "🏛️ **Sai College - Available Courses:**\n\n"
+            text += "📘 **UG Courses (3 Years):**\n"
+            for code, info in college_info.get("ug_courses", {}).items():
+                text += f"  🎓 {code} — {info['fee']}\n"
+            text += "\n📗 **PG Courses (2 Years):**\n"
+            for code, info in college_info.get("pg_courses", {}).items():
+                text += f"  🎓 {code} — {info['fee']}\n"
+            text += "\n📙 **Diploma Courses:**\n"
+            for code, info in college_info.get("diploma_courses", {}).items():
+                text += f"  🎓 {code} — {info['fee']}\n"
+            text += f"\n💡 Kisi bhi course ka naam type karein full details ke liye!\n📞 {college_info['phone']}"
+            return text
 
         if any(
             phrase in query
-            for phrase in ["last date", "deadline", "admission kab tak", "kab tak"]
+            for phrase in ["last date", "deadline", "admission kab tak", "kab tak", "closing date", "end date", "akhiri tarikh", "form date", "due date", "expiry", "last chance"]
         ):
             return (
                 "📅 ADMISSION LAST DATE:\n\n"
@@ -609,7 +770,7 @@ def get_response(user_input):
 
         if any(
             w in query
-            for w in ["admission", "apply", "eligibility", "documents", "pravesh"]
+            for w in ["admission", "apply", "eligibility", "documents", "pravesh", "form", "enrollment", "registration", "procedure", "process", "kaise le", "admisn"]
         ):
             return (
                 "📋 ADMISSION PROCESS:\n\n"
@@ -636,12 +797,8 @@ def get_response(user_input):
         if any(
             phrase in query
             for phrase in [
-                "semester",
-                "yearly",
-                "exam system",
-                "semester system",
-                "kitne semester",
-                "annual",
+                "semester", "yearly", "exam system", "semester system",
+                "kitne semester", "annual", "academic year", "term", "duration", "pattern", "sem"
             ]
         ):
             return (
@@ -662,12 +819,8 @@ def get_response(user_input):
         if any(
             word in query
             for word in [
-                "attendance",
-                "hazri",
-                "present",
-                "absent",
-                "75 percent",
-                "attendance policy",
+                "attendance", "hazri", "present", "absent", "75 percent", "attendance policy",
+                "minimum attendance", "leave", "chutti", "regular", "medical"
             ]
         ):
             return (
@@ -685,11 +838,8 @@ def get_response(user_input):
         if any(
             phrase in query
             for phrase in [
-                "exam pattern",
-                "paper pattern",
-                "marks distribution",
-                "theory practical",
-                "exam kaisa",
+                "exam pattern", "paper pattern", "marks distribution", "theory practical",
+                "exam kaisa", "marking system", "internal external", "passing marks", "total marks", "exam method"
             ]
         ):
             return (
@@ -711,13 +861,8 @@ def get_response(user_input):
         if any(
             w in query
             for w in [
-                "scholarship",
-                "chhatravriti",
-                "concession",
-                "financial",
-                "milti",
-                "milta",
-                "chahiye",
+                "scholarship", "chhatravriti", "concession", "financial", "milti", "milta", "chahiye",
+                "discount", "free", "aid", "support", "help", "fund"
             ]
         ):
             return (
@@ -739,7 +884,7 @@ def get_response(user_input):
                 f"📞 Details: {college_info['phone']}"
             )
 
-        if any(word in query for word in ["placement", "job", "career", "companies"]):
+        if any(word in query for word in ["placement", "job", "career", "companies", "salary", "package", "recruitment", "internship", "hiring", "rozi roti", "rozgar", "nokri"]):
             return (
                 "💼 PLACEMENT CELL:\n\n"
                 "🏢 TOP COMPANIES:\n"
@@ -765,7 +910,7 @@ def get_response(user_input):
                 f"📞 {college_info['phone']}"
             )
 
-        if "photo" in query or "gallery" in query or "image" in query:
+        if any(w in query for w in ["photo", "gallery", "image", "pictures", "video", "photos", "images", "pics", "campus view", "events"]):
             return "📸 Gallery opening... Please wait!"
 
         log_data(
